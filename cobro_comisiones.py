@@ -105,7 +105,7 @@ class Calculo_comisiones:
                 server.starttls()  
                 server.login(remitente, contrasena)
                 server.send_message(msg)
-                print(f"Correo electrÃ³nico enviado exitosamente a {destinatario}.")
+                print(f"Correo electrónico enviado exitosamente a {destinatario}.")
         except Exception as e:
             print(f"Error al enviar el correo a {destinatario}: {e}")
             
@@ -116,20 +116,20 @@ class Calculo_comisiones:
 conn = sqlite3.connect('C:/Prueba_ecosistemas/database.sqlite')
 calculo = Calculo_comisiones(conn)
 
-# Generamos los diccionarios necesarios dentro de la automatizaciÃ³n
+# Generamos los diccionarios necesarios dentro de la automatización
 precios = {
     'Innovexa Solutions': 300,
-    'NexaTech Industries': [250,  # Asignar si hay entre 0 â€“ 10.000 peticiones totales
-                            200,  # Asignar si hay entre 10.001 â€“ 20.000 peticiones totales
-                            170], # Asignar si hay mÃ¡s de 20.001 peticiones totales
+    'NexaTech Industries': [250,  # Asignar si hay entre 0 a€10.000 peticiones totales
+                            200,  # Asignar si hay entre 10.001 a€20.000 peticiones totales
+                            170], # Asignar si hay más de 20.001 peticiones totales
     'QuantumLeap Inc.': 600, 
-    'Zenith Corp.': [250,  # Asignar si hay entre 0 â€“ 22.000 peticiones totales
-                     130], # Asignar si hay mÃ¡s de 22.001 peticiones totales
+    'Zenith Corp.': [250,  # Asignar si hay entre 0 a 22.000 peticiones totales
+                     130], # Asignar si hay más de 22.001 peticiones totales
     'FusionWave Enterprises': 300
 }
 limites = {
-    'NexaTech Industries': [10000, 20000],  # LÃ­mites de peticiones totales
-    'Zenith Corp.': 22000  # LÃ­mites de peticiones totales
+    'NexaTech Industries': [10000, 20000],  # Lí­mites de peticiones totales
+    'Zenith Corp.': 22000  # Lí­mites de peticiones totales
 }
 descuentos = {
     'FusionWave Enterprises': [2500, 4500],  # Rango para descuento
@@ -142,10 +142,10 @@ porcentajes = {
 
 
 iva = 0.19 # Se aÃ±adde el valor del IVA colombiano
-mes = '2024-07' # Se aÃ±ade el mes que se quiere desglosar, como ejemplo tomamos Julio del 2024
+mes = '2024-07' # Se añade el mes que se quiere desglosar, como ejemplo tomamos Julio del 2024
 
 
-# Calcular comisiones segpun la informaciÃ³n suministrada anteriormente
+# Calcular comisiones segpun la información suministrada anteriormente
 
 resultado_tab = calculo.calcular_comision(mes, precios, iva)
 
