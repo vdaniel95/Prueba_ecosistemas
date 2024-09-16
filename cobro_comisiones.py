@@ -1,4 +1,4 @@
-# Importamos las librerias requeridas para la implementación del ejercicio
+# Importamos las librerias requeridas para la implementaciÃ³n del ejercicio
 
 import sqlite3
 import pandas as pd
@@ -8,6 +8,11 @@ from email.message import EmailMessage
 from dotenv import load_dotenv
 import os
 
+path_base = os.getcwd()
+
+# Insumos
+path_resultados = os.path.join(path_base, 'Resultados')
+path_env = os.path.join(path_base)
 
 class Calculo_comisiones:
     
@@ -89,7 +94,6 @@ class Calculo_comisiones:
         msg['From'] = remitente
         msg['To'] = destinatario
     
-        # Adjuntar el archivo Excel
         with open(archivo_excel, 'rb') as f:
             file_data = f.read()
             file_name = f.name
@@ -105,7 +109,7 @@ class Calculo_comisiones:
                 server.starttls()  
                 server.login(remitente, contrasena)
                 server.send_message(msg)
-                print(f"Correo electrónico enviado exitosamente a {destinatario}.")
+                print(f"Correo electrï¿½nico enviado exitosamente a {destinatario}.")
         except Exception as e:
             print(f"Error al enviar el correo a {destinatario}: {e}")
             
@@ -116,20 +120,20 @@ class Calculo_comisiones:
 conn = sqlite3.connect('C:/Prueba_ecosistemas/database.sqlite')
 calculo = Calculo_comisiones(conn)
 
-# Generamos los diccionarios necesarios dentro de la automatización
+# Generamos los diccionarios necesarios dentro de la automatizaciÃ³n
 precios = {
     'Innovexa Solutions': 300,
-    'NexaTech Industries': [250,  # Asignar si hay entre 0 a€10.000 peticiones totales
-                            200,  # Asignar si hay entre 10.001 a€20.000 peticiones totales
-                            170], # Asignar si hay más de 20.001 peticiones totales
+    'NexaTech Industries': [250,  # Asignar si hay entre 0 a 10.000 peticiones totales
+                            200,  # Asignar si hay entre 10.001 a 20.000 peticiones totales
+                            170], # Asignar si hay mÃ¡s de 20.001 peticiones totales
     'QuantumLeap Inc.': 600, 
     'Zenith Corp.': [250,  # Asignar si hay entre 0 a 22.000 peticiones totales
-                     130], # Asignar si hay más de 22.001 peticiones totales
+                     130], # Asignar si hay mÃ¡s de 22.001 peticiones totales
     'FusionWave Enterprises': 300
 }
 limites = {
-    'NexaTech Industries': [10000, 20000],  # Lí­mites de peticiones totales
-    'Zenith Corp.': 22000  # Lí­mites de peticiones totales
+    'NexaTech Industries': [10000, 20000],  # LÃ­mites de peticiones totales
+    'Zenith Corp.': 22000  # LÃ­mites de peticiones totales
 }
 descuentos = {
     'FusionWave Enterprises': [2500, 4500],  # Rango para descuento
@@ -141,11 +145,11 @@ porcentajes = {
 }
 
 
-iva = 0.19 # Se aÃ±adde el valor del IVA colombiano
-mes = '2024-07' # Se añade el mes que se quiere desglosar, como ejemplo tomamos Julio del 2024
+iva = 0.19 # Se aÃ±ade el valor del IVA colombiano
+mes = '2024-07' # Se aÃ±de el mes que se quiere desglosar, como ejemplo tomamos Julio del 2024
 
 
-# Calcular comisiones segpun la información suministrada anteriormente
+# Calcular comisiones segÃºn la informaciÃ³n suministrada anteriormente
 
 resultado_tab = calculo.calcular_comision(mes, precios, iva)
 
@@ -154,15 +158,18 @@ df_final = resultado_tab[['Fecha-Mes', 'commerce_name', 'commerce_nit', 'Valor_c
 df_final = df_final.rename(columns={'commerce_name': 'Nombre', 'commerce_nit': 'Nit', 'commerce_email': 'Correo'})
 df_final.to_excel(archivo_excel, index=False)
 
-load_dotenv('C:\Prueba_ecosistemas\.env')
+load_dotenv(path_env)
 correo_remitente = os.getenv('CORREO_REMITENTE')
 correo_ejecutor = os.getenv('CORREO_EJECUTOR')
 password = os.getenv('PASSWORD')
 
-# Guardar el DataFrame como archivo Excel general
-archivo_excel = 'resultados_comisiones.xlsx'
-df_final.to_excel(archivo_excel, index=False)
+date_str = str(mes)
+date_str
 
+# Agrega la fecha al nombre de los archivos de salida
+xlsx_filename = os.path.join(path_resultados, f'Cobro_comisiï¿½n_{date_str}.xlsx')
+df_final.to_excel(xlsx_filename, index=False, header=False)
 # Enviar el correo como ejecutor
-calculo.enviar_correo(archivo_excel, correo_ejecutor, correo_remitente , password)
-df_final.to_excel('C:\Prueba_ecosistemas\Resultados\df_final.xlsx')
+archivo_excel = xlsx_filename
+calculo.enviar_correo(archivo_excel, correo_ejecutor, correo_remitente, password)
+
